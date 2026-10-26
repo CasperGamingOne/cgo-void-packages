@@ -1,0 +1,20 @@
+# Template file for 'umbriel'
+pkgname=umbriel
+version=0.1.0
+revision=1
+_commit=5be76078bf9b14ba1b67e0d46eb60bf76dc4aba3
+build_style=meson
+hostmakedepends="pkg-config wayland-devel"
+makedepends="cairo-devel json-c++ libdisplay-info-devel libdrm-devel libinput-devel
+ libxcb-devel pango-devel pixman-devel tomlplusplus-devel wayland-devel
+ wayland-protocols wlroots0.20-devel xcb-util-renderutil-devel xcb-util-wm-devel"
+short_desc="Wayland compositor designed for the Noctalia desktop environment"
+maintainer="CasperGamingOne <caspergamingone@outlook.dk>"
+license="MIT"
+homepage="https://github.com/noctalia-dev/umbriel"
+distfiles="https://github.com/noctalia-dev/umbriel/archive/${_commit}.tar.gz"
+checksum=42af5ea4e1da9b34ac11c09dfb8d1dd92358cb1fcad4236eb9160d6092ac3618
+
+post_install() {
+	vlicense LICENSE
+}

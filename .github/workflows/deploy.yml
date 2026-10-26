@@ -1,0 +1,106 @@
+name: Build and Deploy Repository
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'srcpkgs/noctalia/**'
+      - 'srcpkgs/umbriel/**'
+      - 'srcpkgs/noctalia-greeter/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build XBPS Packages
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/void-linux/void-glibc-full:latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Prepare Void Container
+        run: |
+          xbps-install -Syu xbps
+          xbps-install -yu
+          xbps-install -y sudo bash grep curl git tar xtools
+          useradd -m -G xbuilder builder || true
+          chown -R builder:xbuilder .
+
+      - name: Bootstrap Masterdir
+        run: |
+          su builder -c "./xbps-src -m masterdir-x86_64 binary-bootstrap"
+
+      - name: Build Noctalia
+        run: |
+          su builder -c "./xbps-src -m masterdir-x86_64 pkg noctalia"
+
+      - name: Build Umbriel
+        run: |
+          su builder -c "./xbps-src -m masterdir-x86_64 pkg umbriel"
+
+      - name: Build Noctalia Greeter
+        run: |
+          su builder -c "./xbps-src -m masterdir-x86_64 pkg noctalia-greeter"
+
+      - name: Create Repo Index
+        run: |
+          mkdir -p deploy/x86_64
+          cp -v hostdir/binpkgs/*.xbps deploy/x86_64/ 2>/dev/null || cp -v hostdir/binpkgs/*/*.xbps deploy/x86_64/ 2>/dev/null || true
+          xbps-rindex -a deploy/x86_64/*.xbps
+
+          cat << 'HTML' > deploy/index.html
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>CGO Void Linux Third-Party Repository</title>
+            <style>
+              body { font-family: sans-serif; margin: 2rem; line-height: 1.6; }
+              code { background: #eee; padding: 0.2rem 0.4rem; border-radius: 4rem; }
+              pre { background: #f4f4f4; padding: 1rem; border-radius: 4px; overflow-x: auto; }
+            </style>
+          </head>
+          <body>
+            <h1>CGO Void Linux Third-Party Repository</h1>
+            <p>This repository provides pre-built binary packages for <strong>Noctalia</strong>, <strong>Umbriel</strong>, and <strong>Noctalia Greeter</strong> for Void Linux systems.</p>
+
+            <h2>Installation Instructions</h2>
+            <p>Add this repository to your Void Linux system by creating <code>/etc/xbps.d/cgo.conf</code>:</p>
+            <pre>repository=https://caspergamingone.github.io/cgo-void-packages/x86_64</pre>
+
+            <p>Then synchronize and install packages:</p>
+            <pre>sudo xbps-install -S
+sudo xbps-install noctalia umbriel noctalia-greeter</pre>
+          </body>
+          </html>
+          HTML
+
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: deploy
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
