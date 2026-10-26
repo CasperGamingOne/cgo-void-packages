@@ -5,16 +5,10 @@ on:
     branches:
       - main
       - master
-    paths:
-      - 'srcpkgs/noctalia/**'
-      - 'srcpkgs/umbriel/**'
-      - 'srcpkgs/noctalia-greeter/**'
-      - 'common/scripts/generate-site.sh'
-      - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -79,6 +73,27 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Pages Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: deploy-site
+
+      - name: Extract Artifact
+        run: |
+          mkdir -p extracted-site
+          tar -xf deploy-site/artifact.tar -C extracted-site || cp -r deploy-site/* extracted-site/
+
+      - name: Deploy to gh-pages Branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./extracted-site
+          publish_branch: gh-pages
+
+      - name: Deploy to GitHub Pages API
         id: deployment
         uses: actions/deploy-pages@v4
