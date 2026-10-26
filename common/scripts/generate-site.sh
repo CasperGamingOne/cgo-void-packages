@@ -683,6 +683,9 @@ html_content = f'''<!DOCTYPE html>
 </script>
 </body></html>'''
 
+with open(f"{output_dir}/.nojekyll", "w") as f:
+    pass
+
 with open(f"{output_dir}/index.html", "w", encoding="utf-8") as f:
     f.write(html_content)
 
