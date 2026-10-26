@@ -28,9 +28,9 @@ jobs:
     steps:
       - name: Prepare container
         run: |
-          # switch to repo-ci mirror
+          # switch to repo-fastly mirror
           mkdir -p /etc/xbps.d && cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/
-          sed -i 's|repo-default|repo-ci|g' /etc/xbps.d/*-repository-*.conf
+          sed -i 's|repo-default|repo-fastly|g' /etc/xbps.d/*-repository-*.conf
           # install dependencies
           xbps-install -Syu xbps && xbps-install -yu && xbps-install -y sudo bash grep curl git
           # create non-root user
@@ -85,9 +85,9 @@ jobs:
     steps:
       - name: Prepare container
         run: |
-          # switch to repo-ci mirror
+          # switch to repo-fastly mirror
           mkdir -p /etc/xbps.d && cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/
-          sed -i 's|repo-default|repo-ci|g' /etc/xbps.d/*-repository-*.conf
+          sed -i 's|repo-default|repo-fastly|g' /etc/xbps.d/*-repository-*.conf
           # install dependencies
           xbps-install -Syu xbps && xbps-install -yu && xbps-install -y sudo bash curl git
           # create non-root user
