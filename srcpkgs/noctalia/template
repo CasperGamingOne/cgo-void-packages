@@ -1,0 +1,29 @@
+# Template file for 'noctalia'
+pkgname=noctalia
+version=5.3.0
+revision=1
+build_style=meson
+hostmakedepends="pkg-config wayland-devel"
+makedepends="cairo-devel fontconfig-devel freetype-devel glib-devel harfbuzz-devel
+ libcurl-devel pipewire-devel libqalculate-devel librsvg-devel libsecret-devel
+ libsodium-devel libxml2-devel libmd4c-devel json-c++ pango-devel polkit-devel
+ sdbus-c++-devel stb wayland-devel wayland-protocols wireplumber-devel
+ libxkbcommon-devel libical-devel libwebp-devel libjxl-devel libsndfile-devel
+ pam-devel tomlplusplus-devel libepoxy-devel"
+depends="sound-theme-freedesktop"
+short_desc="Sleek, customizable desktop shell crafted for Wayland"
+maintainer="CasperGamingOne <caspergamingone@outlook.dk>"
+license="MIT"
+homepage="https://github.com/noctalia-dev/noctalia"
+distfiles="https://github.com/noctalia-dev/noctalia/releases/download/v${version}/noctalia-v${version}.tar.gz"
+checksum=d7d27ea6f432d96b3750476e881ed06240658d0026129e5f96d3ab7281040b62
+
+post_install() {
+	vlicense LICENSE
+	if [ -z "$CROSS_BUILD" ]; then
+		for shell in bash zsh fish; do
+			${DESTDIR}/usr/bin/noctalia completions ${shell} > noctalia.${shell}
+			vcompletion noctalia.${shell} ${shell}
+		done
+	fi
+}

@@ -18,6 +18,8 @@
 !/etc
 !/srcpkgs
 !/xbps-src
+!/web
+!/docs
 etc/conf
 etc/conf.*
 etc/virtual
