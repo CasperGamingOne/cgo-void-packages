@@ -26,7 +26,7 @@ jobs:
     name: Build XBPS Packages
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/void-linux/void-glibc-full
+      image: ghcr.io/void-linux/void-glibc-full:latest
 
     steps:
       - name: Checkout Repository
