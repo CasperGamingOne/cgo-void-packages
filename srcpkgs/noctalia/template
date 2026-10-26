@@ -9,7 +9,7 @@ makedepends="cairo-devel fontconfig-devel freetype-devel glib-devel harfbuzz-dev
  libsodium-devel libxml2-devel libmd4c-devel json-c++ pango-devel polkit-devel
  sdbus-c++-devel stb wayland-devel wayland-protocols wireplumber-devel
  libxkbcommon-devel libical-devel libwebp-devel libjxl-devel libsndfile-devel
- pam-devel tomlplusplus-devel"
+ pam-devel tomlplusplus-devel libepoxy-devel"
 depends="sound-theme-freedesktop"
 short_desc="Sleek, customizable desktop shell crafted for Wayland"
 maintainer="CasperGamingOne <caspergamingone@outlook.dk>"
