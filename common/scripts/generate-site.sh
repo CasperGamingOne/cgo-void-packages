@@ -575,28 +575,20 @@ html_content = f'''<!DOCTYPE html>
 </div>
 </div>
 </div>
-<!-- GPG Key Security Box -->
+<!-- Repository Information Box -->
 <div class="lg:col-span-4 p-6 rounded-2xl bg-[#0e1628] border border-slate-800/90 space-y-4 flex flex-col justify-between shadow-lg" id="docs">
 <div class="space-y-3">
 <div class="w-10 h-10 rounded-xl bg-slate-900 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
-<span class="material-symbols-outlined text-[22px]">security</span>
+<span class="material-symbols-outlined text-[22px]">info</span>
 </div>
-<h3 class="font-headline font-bold text-lg text-white">GPG Security &amp; Keys</h3>
+<h3 class="font-headline font-bold text-lg text-white">Repository Information</h3>
 <p class="text-xs text-slate-300 font-medium leading-relaxed">
-              CasperGamingOne signs every index.plist and repodata archive with RSA-4096. Verify fingerprint locally before installing packages.
+              Package index and mirror status are shown for convenience. For trust, verification, and key-management steps, follow the project’s official documentation and release process.
             </p>
 <div class="bg-[#050811] border border-slate-800/90 p-3 rounded-xl font-mono text-[11px] space-y-1">
-<p class="text-slate-500"># Key ID</p>
-<p class="text-indigo-400 font-bold">caspergamingone-3rd-repo.sig</p>
-<p class="text-slate-500 pt-1"># SHA256 Fingerprint</p>
-<p class="text-slate-200 select-all break-all">E9F4 38B1 2CA0 94D8 7B29 A51C 4492 F6E1</p>
+<p class="text-slate-500"># Note</p>
+<p class="text-slate-200">Security-signing instructions are intentionally omitted from this page.</p>
 </div>
-</div>
-<div class="pt-2">
-<button class="w-full py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-indigo-500 hover:text-indigo-300 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 transition-all duration-150 text-slate-200" onclick="copyText('curl -s https://repo.caspergamingone.org/caspergamingone.sig | sudo xbps-query -K -', 'CasperGamingOne GPG key import command copied!')">
-<span class="material-symbols-outlined text-[16px] text-indigo-400">key</span>
-<span>Import CasperGamingOne GPG</span>
-</button>
 </div>
 </div>
 </div>
