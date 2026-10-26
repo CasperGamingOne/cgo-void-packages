@@ -26,6 +26,16 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Cache XBPS Binary Packages
+        uses: actions/cache@v4
+        with:
+          path: hostdir/binpkgs
+          key: xbps-binpkgs-${{ runner.os }}-${{ hashFiles("srcpkgs/noctalia/**", "srcpkgs/umbriel/**", "srcpkgs/noctalia-greeter/**") }}
+          restore-keys: |
+            xbps-binpkgs-${{ runner.os }}-
 
       - name: Prepare Void Container
         run: |
@@ -41,15 +51,42 @@ jobs:
 
       - name: Build Noctalia
         run: |
-          su builder -c "./xbps-src -m masterdir-x86_64 pkg noctalia"
+          pkg="noctalia"
+          if ls hostdir/binpkgs/${pkg}-[0-9]*.xbps 1>/dev/null 2>&1 || ls hostdir/binpkgs/*/${pkg}-[0-9]*.xbps 1>/dev/null 2>&1; then
+            if git diff --quiet HEAD~1 HEAD -- srcpkgs/${pkg}/ 2>/dev/null; then
+              echo "No changes in srcpkgs/${pkg} and package binary exists in hostdir/binpkgs. Skipping build."
+            else
+              su builder -c "./xbps-src -m masterdir-x86_64 pkg ${pkg}"
+            fi
+          else
+            su builder -c "./xbps-src -m masterdir-x86_64 pkg ${pkg}"
+          fi
 
       - name: Build Umbriel
         run: |
-          su builder -c "./xbps-src -m masterdir-x86_64 pkg umbriel"
+          pkg="umbriel"
+          if ls hostdir/binpkgs/${pkg}-[0-9]*.xbps 1>/dev/null 2>&1 || ls hostdir/binpkgs/*/${pkg}-[0-9]*.xbps 1>/dev/null 2>&1; then
+            if git diff --quiet HEAD~1 HEAD -- srcpkgs/${pkg}/ 2>/dev/null; then
+              echo "No changes in srcpkgs/${pkg} and package binary exists in hostdir/binpkgs. Skipping build."
+            else
+              su builder -c "./xbps-src -m masterdir-x86_64 pkg ${pkg}"
+            fi
+          else
+            su builder -c "./xbps-src -m masterdir-x86_64 pkg ${pkg}"
+          fi
 
       - name: Build Noctalia Greeter
         run: |
-          su builder -c "./xbps-src -m masterdir-x86_64 pkg noctalia-greeter"
+          pkg="noctalia-greeter"
+          if ls hostdir/binpkgs/${pkg}-[0-9]*.xbps 1>/dev/null 2>&1 || ls hostdir/binpkgs/*/${pkg}-[0-9]*.xbps 1>/dev/null 2>&1; then
+            if git diff --quiet HEAD~1 HEAD -- srcpkgs/${pkg}/ 2>/dev/null; then
+              echo "No changes in srcpkgs/${pkg} and package binary exists in hostdir/binpkgs. Skipping build."
+            else
+              su builder -c "./xbps-src -m masterdir-x86_64 pkg ${pkg}"
+            fi
+          else
+            su builder -c "./xbps-src -m masterdir-x86_64 pkg ${pkg}"
+          fi
 
       - name: Create Repo Index & Generate Website
         run: |
