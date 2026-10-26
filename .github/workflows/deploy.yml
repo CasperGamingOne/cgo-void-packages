@@ -59,15 +59,18 @@ jobs:
 
       - name: Create Repo Index & Generate Website
         run: |
-          mkdir -p deploy/x86_64
-          cp -v hostdir/binpkgs/*.xbps deploy/x86_64/ 2>/dev/null || cp -v hostdir/binpkgs/*/*.xbps deploy/x86_64/ 2>/dev/null || true
-          xbps-rindex -a deploy/x86_64/*.xbps
-          bash common/scripts/generate-site.sh deploy
+          mkdir -p web/x86_64 docs/x86_64
+          cp -v hostdir/binpkgs/*.xbps web/x86_64/ 2>/dev/null || cp -v hostdir/binpkgs/*/*.xbps web/x86_64/ 2>/dev/null || true
+          cp -v web/x86_64/*.xbps docs/x86_64/ 2>/dev/null || true
+          xbps-rindex -a web/x86_64/*.xbps
+          xbps-rindex -a docs/x86_64/*.xbps
+          bash common/scripts/generate-site.sh web
+          bash common/scripts/generate-site.sh docs
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: deploy
+          path: web
 
   deploy:
     environment:

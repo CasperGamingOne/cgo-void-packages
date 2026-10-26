@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-OUTPUT_DIR="${1:-deploy}"
+OUTPUT_DIR="${1:-web}"
 REPO_URL="${REPO_URL:-https://caspergamingone.github.io/cgo-void-packages/x86_64}"
 
 mkdir -p "$OUTPUT_DIR"
