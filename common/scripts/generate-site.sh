@@ -7,7 +7,7 @@ REPO_URL="${REPO_URL:-https://caspergamingone.github.io/cgo-void-packages/x86_64
 mkdir -p "$OUTPUT_DIR"
 
 python3 - "$OUTPUT_DIR" "$REPO_URL" << 'PYEOF'
-import sys, os, glob
+import sys, os, glob, html
 
 output_dir = sys.argv[1]
 repo_url = sys.argv[2]
@@ -52,6 +52,12 @@ for t in templates:
     if not pkgname:
         continue
 
+    pkgname_esc = html.escape(pkgname, quote=True)
+    version_esc = html.escape(version, quote=True)
+    revision_esc = html.escape(revision, quote=True)
+    short_desc_esc = html.escape(short_desc, quote=True)
+    maintainer_esc = html.escape(maintainer, quote=True)
+
     cat = "Wayland / Compositor"
     cat_color = "text-indigo-400"
     badge = ""
@@ -70,7 +76,7 @@ for t in templates:
         badge = '<span class="px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-500/50 text-[10px] font-mono text-emerald-300 font-bold uppercase tracking-wide">FLAGSHIP</span>'
 
     card_html = f'''
-    <div class="pkg-card p-5 rounded-2xl bg-[#0e1628] border border-slate-800/90 flex flex-col justify-between space-y-4 hover:border-indigo-500/50 hover:-translate-y-1 transition-all duration-200 shadow-lg" data-name="{pkgname}" data-desc="{short_desc}" data-category="{cat}">
+    <div class="pkg-card p-5 rounded-2xl bg-[#0e1628] border border-slate-800/90 flex flex-col justify-between space-y-4 hover:border-indigo-500/50 hover:-translate-y-1 transition-all duration-200 shadow-lg" data-name="{pkgname_esc}" data-desc="{short_desc_esc}" data-category="{cat}">
       <div class="space-y-3">
         <div class="flex items-start justify-between gap-2">
           <div>
@@ -79,8 +85,8 @@ for t in templates:
               {badge}
             </div>
             <h3 class="text-lg font-mono font-bold text-white flex items-center gap-1.5 mt-0.5">
-              {pkgname}
-              <span class="text-xs font-normal text-slate-400">v{version}.r{revision}</span>
+              {pkgname_esc}
+              <span class="text-xs font-normal text-slate-400">v{version_esc}.r{revision_esc}</span>
             </h3>
           </div>
           <span class="px-2 py-0.5 rounded-md bg-emerald-950/70 border border-emerald-500/40 text-[11px] font-mono text-emerald-400 font-medium flex items-center gap-1 shrink-0">
@@ -88,7 +94,7 @@ for t in templates:
           </span>
         </div>
         <p class="text-xs text-slate-300 font-medium leading-relaxed">
-          {short_desc}
+          {short_desc_esc}
         </p>
         <div class="flex flex-wrap gap-1.5 pt-1">
           <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-indigo-400 font-medium">x86_64</span>
@@ -97,8 +103,8 @@ for t in templates:
         </div>
       </div>
       <div class="border-t border-slate-800/80 pt-3 flex items-center justify-between text-xs font-mono">
-        <span class="text-slate-500 truncate max-w-[180px]" title="{maintainer}">{maintainer}</span>
-        <button class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 hover:border-indigo-500 hover:text-indigo-300 text-[11px] text-slate-200 flex items-center gap-1 font-semibold transition-colors" onclick="copyText('xbps-install -S {pkgname}', 'Copied: xbps-install -S {pkgname}')">
+        <span class="text-slate-500 truncate max-w-[180px]" title="{maintainer_esc}">{maintainer_esc}</span>
+        <button class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 hover:border-indigo-500 hover:text-indigo-300 text-[11px] text-slate-200 flex items-center gap-1 font-semibold transition-colors" onclick="copyText('xbps-install -S {pkgname_esc}', 'Copied: xbps-install -S {pkgname_esc}')">
           <span class="material-symbols-outlined text-[13px] text-indigo-400">terminal</span>
           <span>install</span>
         </button>
