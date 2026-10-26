@@ -7,7 +7,7 @@ hostmakedepends="pkg-config wayland-devel"
 makedepends="cairo-devel fontconfig-devel freetype-devel glib-devel harfbuzz-devel
  libcurl-devel libpipewire-devel libqalculate-devel librsvg-devel libsecret-devel
  libsodium-devel libxml2-devel md4c-devel json-c++ pango-devel polkit-devel
- sdbus-c++-devel stb wayland-devel wayland-protocols wireplumber-devel xkbcommon-devel"
+ sdbus-c++-devel stb wayland-devel wayland-protocols wireplumber-devel libxkbcommon-devel"
 depends="sound-theme-freedesktop"
 short_desc="Sleek, customizable desktop shell crafted for Wayland"
 maintainer="CasperGamingOne <caspergamingone@outlook.dk>"
