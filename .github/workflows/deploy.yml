@@ -33,7 +33,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: hostdir/binpkgs
-          key: xbps-binpkgs-${{ runner.os }}-${{ hashFiles("srcpkgs/noctalia/**", "srcpkgs/umbriel/**", "srcpkgs/noctalia-greeter/**") }}
+          key: xbps-binpkgs-${{ runner.os }}-${{ hashFiles('srcpkgs/noctalia/**', 'srcpkgs/umbriel/**', 'srcpkgs/noctalia-greeter/**') }}
           restore-keys: |
             xbps-binpkgs-${{ runner.os }}-
 
