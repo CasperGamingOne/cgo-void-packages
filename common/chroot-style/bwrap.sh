@@ -9,12 +9,20 @@ readonly HOSTDIR="$3"
 readonly EXTRA_ARGS="$4"
 shift 4
 
+msg_red() {
+	# error messages in bold/red
+	[ -n "$NOCOLORS" ] || printf >&2 "\033[1m\033[31m"
+	printf "=> ERROR: %s\\n" "$@" >&2
+	[ -n "$NOCOLORS" ] || printf >&2 "\033[m"
+}
+
 if ! command -v bwrap >/dev/null 2>&1; then
+	msg_red "could not find bwrap"
 	exit 1
 fi
 
-if [ -z "$MASTERDIR" -o -z "$DISTDIR" ]; then
-	echo "$0 MASTERDIR/DISTDIR not set"
+if [ -z "$MASTERDIR" ] || [ -z "$DISTDIR" ]; then
+	msg_red "$0: MASTERDIR/DISTDIR not set"
 	exit 1
 fi
 
